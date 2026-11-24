@@ -19,7 +19,7 @@ from dossier.paths import config_path, ensure_local_home
 from dossier.pipeline import inspect_item
 from dossier.prompts import INSTRUCTIONS, URL_SPECIALIST
 from dossier.schemas import DossierReport
-from dossier.tools import ALL_TOOLS, READ_TOOLS, inspect_url_tool
+from dossier.tools import ALL_TOOLS, READ_TOOLS, clear_current_source, inspect_url_tool, set_current_source
 
 ApprovalFn = Callable[[str, dict[str, Any], str], bool]
 
@@ -53,7 +53,10 @@ def inspect_with_optional_agent(
     force_compile = os.environ.get("DOSSIER_FORCE_TOOLS", "1").strip() not in {"0", "false", "no"}
     forced = ["compile_dossier"] if force_compile else None
 
+    body, headers = _source_parts(path=path, text=text)
+    set_current_source(body, headers)
     runtime = APIRuntime.from_config_path(str(cfg))
+    url_notes = ""
     try:
         with Agent(
             name="url-specialist",
@@ -77,7 +80,6 @@ def inspect_with_optional_agent(
                                   description="Hand a URL-inspection question to the URL specialist.")],
                 session_id=session_id,
             ) as coordinator:
-                url_notes = ""
                 if report.artifacts.urls:
                     child = subagent(
                         coordinator,
@@ -101,23 +103,109 @@ def inspect_with_optional_agent(
                 return _merge_result(report, result)
     except AgentOutputValidationError as exc:
         raw = getattr(exc, "raw_text", "") or ""
-        if _looks_like_prompt_echo(raw):
-            report.summary += " The provider echoed the prompt instead of returning a dossier; keeping the deterministic brief."
-            report.mode = "agent-echo-fallback"
-            return report
-        report.summary += f" The model reply failed schema validation ({exc}). Keeping the deterministic brief."
-        report.mode = "agent-validation-fallback"
-        return report
+        return _fallback_from_model_text(report, raw=raw, exc=exc, session_id=session_id, url_notes=url_notes)
     except TurnTimeoutError as exc:
-        report.summary += f" The OpenMinion turn timed out ({exc}). Keeping the deterministic brief."
-        report.mode = "agent-timeout-fallback"
-        return report
+        return _annotate_fallback(
+            report, "agent-timeout-fallback",
+            f" The OpenMinion turn timed out ({exc}). Keeping the deterministic brief.",
+            session_id=session_id, url_notes=url_notes,
+        )
     except ProviderError as exc:
-        report.summary += f" The model provider failed ({exc.code}: {exc.message}). Keeping the deterministic brief."
-        report.mode = "agent-provider-fallback"
-        return report
+        return _annotate_fallback(
+            report, "agent-provider-fallback",
+            f" The model provider failed ({exc.code}: {exc.message}). Keeping the deterministic brief.",
+            session_id=session_id, url_notes=url_notes,
+        )
+    except Exception as exc:
+        # e.g. TurnRequestError when a leftover session is bound to a different agent
+        # after switching providers (echo -> ollama).
+        return _annotate_fallback(
+            report, "agent-runtime-fallback",
+            f" The OpenMinion runtime failed ({type(exc).__name__}: {exc}). "
+            "Keeping the deterministic brief. If the error mentions a session, retry with a fresh --session.",
+            session_id=session_id, url_notes=url_notes,
+        )
     finally:
+        clear_current_source()
         runtime.close()
+
+
+
+
+def _source_parts(*, path: str | None, text: str | None) -> tuple[str, str]:
+    from dossier.extract import load_headers_and_body_from_text, load_source
+    if path:
+        try:
+            return load_source(path=path)
+        except (OSError, ValueError):
+            return "", ""
+    return load_headers_and_body_from_text(text or "")
+
+
+def _looks_like_freshness_refusal(text: str) -> bool:
+    """OpenMinion's brain freshness gate can refuse a valid inspect as 'live sports'."""
+    t = (text or "").lower()
+    return (
+        "freshness answer" in t
+        or "grounded current sports answer" in t
+        or "missing exact-date evidence" in t
+        or "retry with live data" in t
+    )
+
+
+def _annotate_fallback(
+    report: DossierReport,
+    mode: str,
+    note: str,
+    *,
+    session_id: str | None = None,
+    url_notes: str = "",
+) -> DossierReport:
+    report.summary += note
+    if url_notes.strip():
+        report.summary += " The URL specialist subagent completed an inspect_url review of the quoted links."
+    report.mode = mode
+    if session_id and not report.session_id:
+        report.session_id = session_id
+    return report
+
+
+def _fallback_from_model_text(
+    report: DossierReport,
+    *,
+    raw: str,
+    exc: Exception | None = None,
+    session_id: str | None = None,
+    url_notes: str = "",
+) -> DossierReport:
+    if _looks_like_freshness_refusal(raw):
+        return _annotate_fallback(
+            report,
+            "agent-freshness-fallback",
+            " OpenMinion's freshness classifier mis-routed this inspect as a live or time-sensitive query and refused to compile a dossier; keeping the deterministic brief.",
+            session_id=session_id,
+            url_notes=url_notes,
+        )
+    if _looks_like_prompt_echo(raw):
+        return _annotate_fallback(
+            report,
+            "agent-echo-fallback",
+            " The provider echoed the prompt instead of returning a dossier; keeping the deterministic brief.",
+            session_id=session_id,
+            url_notes=url_notes,
+        )
+    extra = f" ({exc})" if exc else ""
+    if raw.strip() and not exc:
+        extra = " The model ran but did not return a valid DossierReport; keeping the deterministic brief."
+        mode = "agent-untyped"
+        return _annotate_fallback(report, mode, extra, session_id=session_id, url_notes=url_notes)
+    return _annotate_fallback(
+        report,
+        "agent-validation-fallback",
+        f" The model reply failed schema validation{extra}. Keeping the deterministic brief.",
+        session_id=session_id,
+        url_notes=url_notes,
+    )
 
 
 def _looks_like_prompt_echo(text: str) -> bool:
@@ -128,12 +216,6 @@ def _looks_like_prompt_echo(text: str) -> bool:
 
 def _merge_result(report: DossierReport, result) -> DossierReport:
     raw_text = getattr(result, "text", "") or ""
-    if _looks_like_prompt_echo(raw_text):
-        report.summary += " The provider echoed the prompt instead of returning a dossier; keeping the deterministic brief."
-        report.mode = "agent-echo-fallback"
-        report.session_id = getattr(result, "session_id", None)
-        report.run_id = getattr(result, "run_id", None)
-        return report
     output = result.output if isinstance(getattr(result, "output", None), DossierReport) else None
     if output is None and getattr(result, "text", ""):
         try:
@@ -141,11 +223,13 @@ def _merge_result(report: DossierReport, result) -> DossierReport:
         except Exception:
             output = None
     if output is None:
-        report.summary += " The model ran but did not return a valid DossierReport; keeping the deterministic brief."
-        report.mode = "agent-untyped"
-        report.session_id = getattr(result, "session_id", None)
-        report.run_id = getattr(result, "run_id", None)
-        return report
+        fallback = _fallback_from_model_text(
+            report,
+            raw=raw_text,
+            session_id=getattr(result, "session_id", None),
+        )
+        fallback.run_id = getattr(result, "run_id", None)
+        return fallback
     output.mode = "openminion-agent"
     output.session_id = result.session_id
     output.run_id = result.run_id

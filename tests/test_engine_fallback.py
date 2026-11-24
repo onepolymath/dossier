@@ -33,3 +33,21 @@ def test_prompt_echo_is_detected():
     assert _looks_like_prompt_echo("openminion: Inspect this message (file x)")
     assert _looks_like_prompt_echo("Inspect this message (pasted text) and return a DossierReport.")
     assert not _looks_like_prompt_echo('{"severity": "high", "summary": "ok"}')
+
+
+from dossier.engine import _looks_like_freshness_refusal, _fallback_from_model_text
+from dossier.pipeline import inspect_item
+
+
+def test_freshness_refusal_is_detected():
+    raw = (
+        "I couldn't provide a grounded current sports answer because "
+        "Missing exact-date evidence for an exact-date freshness answer. "
+        "Please retry with live data available so I can answer with sources and an exact date."
+    )
+    assert _looks_like_freshness_refusal(raw)
+    report = inspect_item(text="hello, see you at 3pm for the standup.")
+    out = _fallback_from_model_text(report, raw=raw, session_id="dossier-ollama-test")
+    assert out.mode == "agent-freshness-fallback"
+    assert out.session_id == "dossier-ollama-test"
+    assert "freshness classifier" in out.summary

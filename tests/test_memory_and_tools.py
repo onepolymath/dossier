@@ -53,3 +53,25 @@ def test_case_roundtrip_matches_report(isolated_cases):
     listed = memory_mod.list_cases()
     assert listed[0].id == saved.id
     assert listed[0].severity == "high"
+
+
+from dossier.tools import clear_current_source, compile_dossier_tool, inspect_text_tool, set_current_source
+
+
+def test_compile_dossier_without_args_uses_current_source():
+    text = Path("fixtures/samples/payroll_lure.eml").read_text(encoding="utf-8")
+    # Use the body after headers so the tool matches inspect_body
+    set_current_source(text, "")
+    try:
+        payload = json.loads(compile_dossier_tool())
+    finally:
+        clear_current_source()
+    assert payload["severity"] in {"high", "medium"}
+    assert payload["signals"]
+
+
+def test_inspect_text_accepts_input_text_alias():
+    payload = json.loads(inspect_text_tool(input_text="please enter your password and do not tell anyone"))
+    ids = {row["id"] for row in payload}
+    assert "text.credential_harvest" in ids
+    assert "text.secrecy" in ids

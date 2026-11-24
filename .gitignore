@@ -26,3 +26,9 @@ demo/output/doctor-echo.json
 demo/output/doctor-echo.err
 
 demo/output/echo-agent.txt
+
+# Local Ollama models and server logs (weights are not part of the repo)
+.ollama/
+
+# Raw OpenMinion stderr (slim logs are committed as *.agent.log)
+demo/output/*.agent.err
