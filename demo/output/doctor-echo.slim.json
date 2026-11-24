@@ -1,0 +1,42 @@
+{
+  "config_path": "/workspace/hackathons/cortensor/.om-home/.openminion/agents.json",
+  "config_exists": true,
+  "runtime_posture": {
+    "agent": "openminion",
+    "capability_layering": {
+      "provider_selected": "echo",
+      "provider_source_layer": "agent_runtime",
+      "modes_blocked": [],
+      "plugins_enabled": [
+        "validate"
+      ],
+      "tools_configured_families": [],
+      "ref": "openminion.api.queries.runtime_reports.build_runtime_posture_report"
+    },
+    "home_paths": {
+      "home_root": "/workspace/hackathons/cortensor/.om-home",
+      "data_root": "/workspace/hackathons/cortensor/.om-home/.openminion",
+      "config_path": "/workspace/hackathons/cortensor/.om-home/.openminion/agents.json",
+      "storage_path": "/workspace/hackathons/cortensor/.om-home/.openminion/state/openminion.db",
+      "path_mode": "integrated_runtime",
+      "path_source": "explicit_workspace"
+    }
+  },
+  "capability_report_keys": [
+    "agent",
+    "providers",
+    "modes",
+    "thinking",
+    "plugins",
+    "tools",
+    "mcp"
+  ],
+  "tool_inventory_type": "list",
+  "scheduler_readiness": {
+    "state": "unreachable",
+    "hosted_by": "daemon",
+    "reason": "daemon_unreachable",
+    "check_command": "openminion service status cron"
+  },
+  "compile_dossier_schema": null
+}
