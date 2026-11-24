@@ -1,0 +1,55 @@
+2026-11-24 20:01:34,040 INFO openminion.modules.tool.bootstrap: tool.contract_drift=clean
+2026-11-24 20:01:34,044 INFO openminion: extension event=ext.discovery payload={'plugins': 1, 'tool_plugins': 0, 'providers': 1, 'channels': 1}
+2026-11-24 20:01:34,045 INFO openminion: extension event=ext.activation payload={'plugins_loaded': 1, 'tools_loaded': 104, 'providers_loaded': 11}
+2026-11-24 20:01:34,145 INFO alembic.runtime.plugins: setup plugin alembic.autogenerate.schemas
+2026-11-24 20:01:34,145 INFO alembic.runtime.plugins: setup plugin alembic.autogenerate.tables
+2026-11-24 20:01:34,145 INFO alembic.runtime.plugins: setup plugin alembic.autogenerate.types
+2026-11-24 20:01:34,145 INFO alembic.runtime.plugins: setup plugin alembic.autogenerate.constraints
+2026-11-24 20:01:34,145 INFO alembic.runtime.plugins: setup plugin alembic.autogenerate.defaults
+2026-11-24 20:01:34,145 INFO alembic.runtime.plugins: setup plugin alembic.autogenerate.comments
+2026-11-24 20:01:34,163 INFO alembic.runtime.migration: Context impl SQLiteImpl.
+2026-11-24 20:01:34,163 INFO alembic.runtime.migration: Will assume non-transactional DDL.
+2026-11-24 20:01:34,171 INFO openminion.storage: storage_provider_selected module=retrieve provider=sqlite path_mode=integrated_runtime
+2026-11-24 20:01:34,172 INFO openminion.storage: storage_provider_selected module=retrieve provider=sqlite path_mode=integrated_runtime
+2026-11-24 20:01:34,181 INFO alembic.runtime.migration: Context impl SQLiteImpl.
+2026-11-24 20:01:34,181 INFO alembic.runtime.migration: Will assume non-transactional DDL.
+2026-11-24 20:01:34,203 INFO openminion.modules.tool.selection: selection.mode_resolved
+2026-11-24 20:01:34,204 INFO openminion.agent: BrainBridgeService initialized with home_root=/workspace/hackathons/cortensor/.om-home path_mode=integrated_runtime path_source=explicit_workspace
+2026-11-24 20:01:34,206 INFO openminion.lifecycle: event=component.started component={"capabilities": ["turn_dispatch", "heartbeat"], "component_id": "primary", "component_kind": "runtime_manager", "labels": {"runtime_mode": "hot"}, "owner_module": "openminion-runtime", "scope": "system"}
+2026-11-24 20:01:34,214 INFO openminion.modules.tool.selection: selection.mode_resolved
+2026-11-24 20:01:34,215 INFO openminion.agent.dossier: BrainBridgeService initialized with home_root=/workspace/hackathons/cortensor/.om-home path_mode=integrated_runtime path_source=explicit_workspace
+2026-11-24 20:01:34,216 INFO openminion.gateway.dossier: gateway single turn channel=console target=api-user
+2026-11-24 20:01:34,270 INFO openminion.agent.dossier: BrainBridgeService handling turn for runtime_session=c9231a03bbfd45f5b685751874a4f159 brain_session=c9231a03bbfd45f5b685751874a4f159::conv:c9231a03bbfd45f5b685751874a4f159:c7dd8c2d88284b1b9551e29369736a91 forced_tools=[] capability_category=None
+2026-11-24 20:01:34,282 INFO openminion.storage: storage_provider_selected module=session provider=sqlite
+2026-11-24 20:01:34,296 INFO openminion.agent.dossier: Retrieve adapter initialized with pre-built retrieve service
+2026-11-24 20:01:34,310 INFO openminion.storage: storage_provider_selected module=session provider=sqlite
+2026-11-24 20:01:34,346 INFO openminion.modules.context.service: ASPM-05: active_state_prompt_composition metrics: raw_chars=4264 projected_chars=3891 chars_saved=373
+2026-11-24 20:01:49,788 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2026-11-24 20:01:49,844 INFO openminion.modules.context.service: ASPM-05: active_state_prompt_composition metrics: raw_chars=4264 projected_chars=3891 chars_saved=373
+2026-11-24 20:01:58,183 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2026-11-24 20:02:06,347 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2026-11-24 20:02:06,472 INFO openminion.modules.context.service: ASPM-05: active_state_prompt_composition metrics: raw_chars=4264 projected_chars=3891 chars_saved=373
+2026-11-24 20:02:19,230 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2026-11-24 20:02:34,778 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2026-11-24 20:02:53,905 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2026-11-24 20:03:14,546 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2026-11-24 20:03:14,578 INFO openminion.modules.context.service: ASPM-05: active_state_prompt_composition metrics: raw_chars=4614 projected_chars=4241 chars_saved=373
+2026-11-24 20:03:38,632 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2026-11-24 20:03:38,691 INFO openminion.modules.context.service: ASPM-05: active_state_prompt_composition metrics: raw_chars=22630 projected_chars=8888 chars_saved=13742
+2026-11-24 20:04:01,359 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2026-11-24 20:04:01,473 INFO openminion.gateway.dossier: gateway turn complete channel=console target=api-user session_id=c9231a03bbfd45f5b685751874a4f159 run_id=7a3ce638cdbe48dfa5dacc4a39878b07 request_id=66d991ae7e22459bb8bd3574d65d7d37
+2026-11-24 20:04:01,496 INFO openminion.modules.tool.selection: selection.mode_resolved
+2026-11-24 20:04:01,498 INFO openminion.agent.dossier: BrainBridgeService initialized with home_root=/workspace/hackathons/cortensor/.om-home path_mode=integrated_runtime path_source=explicit_workspace
+2026-11-24 20:04:01,499 INFO openminion.gateway.dossier: gateway single turn channel=console target=api-user
+2026-11-24 20:04:01,571 INFO openminion.agent.dossier: BrainBridgeService handling turn for runtime_session=dossier-ollama-payroll-3 brain_session=dossier-ollama-payroll-3::conv:dossier-ollama-payroll-3:beb82223ddd84dab9ce79e8e4ac01b6a forced_tools=['compile_dossier'] capability_category=None
+2026-11-24 20:04:01,577 INFO openminion.storage: storage_provider_selected module=session provider=sqlite
+2026-11-24 20:04:01,585 INFO openminion.agent.dossier: Retrieve adapter initialized with pre-built retrieve service
+2026-11-24 20:04:01,588 INFO openminion.storage: storage_provider_selected module=session provider=sqlite
+2026-11-24 20:04:01,618 INFO openminion.modules.context.service: ASPM-05: active_state_prompt_composition metrics: raw_chars=4240 projected_chars=3867 chars_saved=373
+2026-11-24 20:04:23,204 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2026-11-24 20:04:23,288 INFO openminion.modules.context.service: ASPM-05: active_state_prompt_composition metrics: raw_chars=4240 projected_chars=3867 chars_saved=373
+2026-11-24 20:07:06,813 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2026-11-24 20:07:17,039 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2026-11-24 20:07:17,160 INFO openminion.gateway.dossier: gateway turn complete channel=console target=api-user session_id=dossier-ollama-payroll-3 run_id=67a0352ddfdd481bb5e1ed9b9bd3df4c request_id=f01f7e3471944930a515d698447e1074
+2026-11-24 20:07:17,179 INFO openminion.runtimectl: event=runtime.manager.shutdown payload={"at": "2026-11-24T19:07:17.179531+00:00", "native_lifecycle_emitted": true, "ts": "2026-11-24T19:07:17.179542+00:00"}
+2026-11-24 20:07:17,180 INFO openminion.lifecycle: event=component.stopped component={"capabilities": ["turn_dispatch", "heartbeat"], "component_id": "primary", "component_kind": "runtime_manager", "labels": {"runtime_mode": "hot"}, "owner_module": "openminion-runtime", "scope": "system"}

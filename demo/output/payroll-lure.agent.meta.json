@@ -1,0 +1,37 @@
+{
+  "provider": "ollama",
+  "model": "llama3.2:3b",
+  "model_quant": "Q4_K_M",
+  "ollama_version": "0.40.18",
+  "openminion": "0.1.22",
+  "agent_id": "dossier",
+  "host": "127.0.0.1:11434",
+  "hardware": "8-core CPU, no GPU, project-local OLLAMA_MODELS",
+  "fixture": "fixtures/samples/payroll_lure.eml",
+  "command": "dossier inspect --agent --session dossier-ollama-payroll-3 --format json --timeout 600 fixtures/samples/payroll_lure.eml",
+  "elapsed_seconds": 346,
+  "finished_at_wat": "2026-11-24 20:07 WAT (Africa/Lagos)",
+  "report_mode": "agent-validation-fallback",
+  "severity": "high",
+  "session_id": "dossier-ollama-payroll-3",
+  "run_id": "67a0352ddfdd481bb5e1ed9b9bd3df4c",
+  "signal_count": 10,
+  "tools_called": [],
+  "freshness_classifier": {
+    "answer_mode": "local_only",
+    "classifier_mode": "llm",
+    "classifier_model": "llama3.2:3b",
+    "domain": "sports",
+    "needs_exact_date": false,
+    "needs_live_data": false,
+    "needs_sources": false,
+    "time_sensitive": false
+  },
+  "assistant_text": "Here is the `DossierReport` extracted from the message:\n\n**DossierReport**\n\n* **Source excerpt**: A phishing email from \"Acme Payroll\" <payroll.helpdesk@gmail.com> to alex@example.com.\n* **Summary**: The email contains 10 evidence signals, with the highest severity being \"high\". The email is a phishing attempt that asks the recipient to verify their account and enter their password, which may lead to financial loss.\n* **Recommendation**: Do not follow the links, install software, or send funds. Preserve the original message and ask a human reviewer or your usual reporting channel to take a look.\n* **Signals**:\n+ 4 signals with \"high\" severity:\n- Display name looks official but the mailbox is a consumer address\n- Reply-To domain does not match the From address\n- Asks the reader to submit a password, OTP, or login\n- Urgent or threatening deadline\n+ 3 signals with \"medium\" severity:\n- Return-Path domain does not match the From address\n- Path or host suggests a login, wallet, or recovery flow\n- Query string asks for a secret or a redirect\n+ 3 signals with \"low\" severity:\n- Unusually generic, padded phrasing often seen in generated lures\n- Unusual TLD \".xyz\" on a lure-shaped link\n- URL specialist notes suggest potential phishing activity\n* **Artifacts**:\n+ URLs: [https://acme-payroll-secure.xyz/login?[REDACTED]\n+ Emails: [alex@example.com, payroll.helpdesk@gmail.com, urgent-pay@mail-acme-secure.xyz]\n+ Domains: [acme-payroll-secure.xyz, example.com, gmail.com, mail-acme-secure.xyz]\n+ Phones: []\n+ Crypto addresses: []\n+ Attachments: []\n* **Disclaimer**: This is an evidence brief for a human reviewer. It is not a finding of fraud, a legal conclusion, or a substitute for reporting channels your organisation already uses.\n\nNote that the `DossierReport` format may vary depending on the specific requirements or context in which it is used.",
+  "url_specialist_session_id": "c9231a03bbfd45f5b685751874a4f159::conv:c9231a03bbfd45f5b685751874a4f159:c7dd8c2d88284b1b9551e29369736a91",
+  "url_specialist_tools": [
+    "inspect_url",
+    "inspect_url"
+  ],
+  "url_specialist_text": "Inspection of URL string \"https://acme-payroll-secure.xyz/login?[REDACTED] suggests:\n\n* Unusual TLD \".xyz\" on a lure-shaped link\n* Path or host suggests a login, wallet, or recovery flow\n* Query string asks for a secret or a redirect\n\nThese findings are based on the inspection of the provided URL string."
+}

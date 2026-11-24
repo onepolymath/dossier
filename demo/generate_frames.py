@@ -62,7 +62,7 @@ def frame_title():
     for i, line in enumerate([
         "Inspect a message. Collect evidence. Leave the verdict to a human reviewer.",
         "Never fetches a destination URL. Built on the OpenMinion 0.1.22 Python SDK.",
-        "Deterministic inspectors in CI; optional agent mode for a model-backed demo.",
+        "Deterministic inspectors in CI; live Ollama llama3.2:3b agent demo on this box.",
     ]):
         draw.text((180, 460 + i * 56), line, font=font("sans", 30), fill=MUTED)
     footer(draw, "01  /  07")
@@ -81,13 +81,15 @@ def signal_block(draw, y, items, color=HIGH):
 def frame_payroll():
     img, draw = canvas()
     draw.text((180, 140), "Payroll lure", font=font("serif", 60), fill=INK)
-    draw.text((180, 220), "severity  high   ·   mode  deterministic", font=font("sans-med", 24), fill=ACCENT)
+    draw.text((180, 220), "severity  high   ·   mode  agent-validation-fallback   ·   llama3.2:3b", font=font("sans-med", 22), fill=ACCENT)
     signal_block(draw, 300, [
         ("Display-name spoof", "“Acme Payroll” is sending from a gmail.com mailbox"),
         ("Reply-To mismatch", "Replies would go to mail-acme-secure.xyz"),
         ("Credential harvest", "Asks the reader to enter a password on a lookalike login URL"),
         ("Secrecy", "“Please do not tell HR about this request”"),
     ])
+    draw.text((180, 740), "URL specialist called inspect_url. Coordinator answered in markdown, not JSON.", font=font("sans", 24), fill=MUTED)
+    draw.text((180, 784), "session  dossier-ollama-payroll-3    346s on CPU    brief kept, not invented", font=font("mono", 22), fill=MUTED)
     footer(draw, "02  /  07")
     save(img, "02-payroll.png")
 
@@ -109,11 +111,14 @@ def frame_wallet():
 def frame_benign():
     img, draw = canvas()
     draw.text((180, 140), "Benign control", font=font("serif", 60), fill=INK)
-    draw.text((180, 220), "severity  info   ·   mode  deterministic", font=font("sans-med", 24), fill=INFO)
-    draw.text((180, 340), "No lure-shaped evidence signals were found in this item.", font=font("serif-reg", 34), fill=INK)
-    draw.text((180, 430), "The recommendation is still cautious:", font=font("sans", 28), fill=MUTED)
-    draw.text((180, 490), "this is not a clean bill of health.", font=font("sans", 28), fill=MUTED)
-    draw.text((180, 600), "Dossier is a clerk, not a judge.", font=font("serif", 32), fill=ACCENT)
+    draw.text((180, 220), "severity  info   ·   mode  agent-validation-fallback   ·   llama3.2:3b", font=font("sans-med", 22), fill=INFO)
+    draw.text((180, 330), "No lure-shaped evidence signals were found in this item.", font=font("serif-reg", 34), fill=INK)
+    draw.text((180, 420), "The model called compile_dossier, extract_artifacts,", font=font("sans", 28), fill=MUTED)
+    draw.text((180, 466), "inspect_headers, and inspect_text, then said:", font=font("sans", 28), fill=MUTED)
+    draw.text((180, 530), "“No strong lure signals were found. This is not a clean bill of health.”", font=font("serif-reg", 28), fill=INK)
+    draw.text((180, 620), "That prose is not a valid DossierReport, so the deterministic brief is kept.", font=font("sans", 24), fill=MUTED)
+    draw.text((180, 700), "session  dossier-ollama-benign-2    ~244s on CPU", font=font("mono", 22), fill=MUTED)
+    draw.text((180, 760), "Dossier is a clerk, not a judge.", font=font("serif", 32), fill=ACCENT)
     footer(draw, "04  /  07")
     save(img, "04-benign.png")
 
@@ -139,7 +144,7 @@ def frame_blocks():
 
 def frame_tests():
     img, draw = canvas()
-    draw.text((180, 140), "Seventeen tests, all passing", font=font("serif", 56), fill=INK)
+    draw.text((180, 140), "Twenty tests, all passing", font=font("serif", 56), fill=INK)
     tests = [
         "test_extracts_urls_and_emails",
         "test_header_mismatch_and_spoof",
@@ -152,7 +157,7 @@ def frame_tests():
         "test_compile_and_url_tools",
         "test_file_recall_and_memory_bundle",
         "test_cli_inspect_pretty_and_json",
-        "test_agent_fallback_and_echo_guard",
+        "test_freshness_and_tool_defaults",
     ]
     col1, col2 = tests[:6], tests[6:]
     y0 = 280
@@ -168,17 +173,17 @@ def frame_tests():
 
 def frame_model():
     img, draw = canvas()
-    draw.text((180, 140), "A real model is the last step", font=font("serif", 56), fill=INK)
+    draw.text((180, 140), "Live Ollama run, honestly reported", font=font("serif", 52), fill=INK)
     lines = [
-        "The inspectors and SDK wiring are ready without a paid API.",
-        "For the required model-backed demo:",
-        "1. Install free local Ollama and run ./scripts/setup-ollama.sh, or",
-        "2. If you have Portal access, put CORTENSOR_API_KEY in .env",
-        "   and run ./scripts/setup-portal.sh.",
-        "Then:  python -m dossier inspect --agent fixtures/samples/payroll_lure.eml",
-        "Echo is only for wiring. Dossier will not treat an echoed prompt as a model answer.",
+        "Provider: Ollama 0.40.18    Model: llama3.2:3b (Q4_K_M) on CPU",
+        "Both fixture inspects used --agent and a real local model. No paid API.",
+        "The URL specialist and the benign coordinator called real @tool inspectors.",
+        "OpenMinion’s freshness classifier labelled a payroll lure as “sports”, and",
+        "llama3.2:3b answered in prose, not typed JSON. Dossier kept the brief.",
+        "That fallback is the intended behaviour — never invent a structured result.",
+        "Outputs: demo/output/*.agent.json  +  .txt  +  .meta.json  +  slim logs.",
     ]
-    y = 280
+    y = 260
     for line in lines:
         draw.text((180, y), line, font=font("sans", 28), fill=INK)
         y += 56

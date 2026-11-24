@@ -1,6 +1,6 @@
 # Draft BUIDL and PR — Dossier (Cortensor Hackathon #5)
 
-Paste or adapt this on DoraHacks and in a pull request to [cortensor/community-projects](https://github.com/cortensor/community-projects) when submitting. Do not submit until the GitHub repository is public, a 1–5 minute demo video of a real model-backed run is attached, and the live command output is current.
+Paste or adapt this on DoraHacks and in a pull request to [cortensor/community-projects](https://github.com/cortensor/community-projects) when submitting. Do not submit until the GitHub repository is public. A short demo video and the live Ollama `llama3.2:3b` command outputs are already in `demo/` — record a slightly longer 1–5 minute screen capture of the same commands if the organiser wants a talking walkthrough, but do not present echo as the model run.
 
 **Deadline (DoraHacks cutoff):** 19 December 2026, 07:59 UTC — 07:59 Europe/London, 08:59 Africa/Lagos.
 
@@ -24,7 +24,9 @@ Inspect a message, collect evidence, and leave the verdict to a human reviewer.
 
 Dossier is a small OpenMinion 0.1 agent that inspects a pasted message or `.eml` file and returns a typed evidence brief. It flags lookalike and punycode URLs, seed-phrase and gift-card language, From / Reply-To mismatches, and claims of an AI-cloned voice or a leaked model persona. It never fetches the destination URL and never claims that a crime occurred.
 
-The inspectors are deterministic Python tools, unit-tested, and always available. `--agent` wraps them in the released OpenMinion `0.1.22` SDK: decorated tools, a forced compile step for a reliable demo, structured `DossierReport` output, a durable session, a bounded URL subagent, a peer handoff, approval-gated case filing, a portable `MemoryBundle`, and runtime diagnostics. If the model, schema, or provider fails, the deterministic brief is kept.
+The inspectors are deterministic Python tools, unit-tested, and always available. `--agent` wraps them in the released OpenMinion `0.1.22` SDK: decorated tools, a forced compile step for a reliable demo, structured `DossierReport` output, a durable session, a bounded URL subagent, a peer handoff, approval-gated case filing, a portable `MemoryBundle`, and runtime diagnostics. If the model, schema, freshness gate, or provider fails, the deterministic brief is kept.
+
+A live Ollama `llama3.2:3b` `--agent` run of the payroll lure and the benign control is recorded under `demo/output/`. Both reports are `agent-validation-fallback`: the model and tools ran, and the brief was kept because the final model text was not valid `DossierReport` JSON. That is intentional and documented.
 
 This is new work, written for Cortensor Hackathon #5.
 
@@ -41,7 +43,14 @@ Details: `docs/BUILDING_BLOCKS_TESTED.md` and `docs/WHAT_WE_LEARNED.md`.
 
 ## Demo
 
-Script: `demo/walkthrough.md`. Still frames and a short video are in `demo/`. Locally: `make test` and `python -m dossier inspect fixtures/samples/payroll_lure.eml`. After Ollama or Portal is configured, add `--agent` and record the model-backed run (required for submission).
+Script: `demo/walkthrough.md`. Still frames and a short video (`demo/walkthrough.mp4`, ~21s) show the live Ollama run. Command outputs:
+
+- `demo/output/payroll-lure.agent.json` / `.txt` / `.meta.json` — session `dossier-ollama-payroll-3`, severity high, 10 signals, 346s. URL specialist called `inspect_url`. Coordinator wrote markdown, not JSON.
+- `demo/output/benign-meeting.agent.json` / `.txt` / `.meta.json` — session `dossier-ollama-benign-2`, severity info, ~244s. The model called `compile_dossier`, `extract_artifacts`, `inspect_headers`, and `inspect_text`.
+
+Reproduce: `./scripts/setup-ollama.sh llama3.2:3b`, then `python -m dossier inspect --agent --timeout 600 --session <fresh-id> fixtures/samples/payroll_lure.eml`.
+
+Locally: `make test` also remains green without a model (20 tests).
 
 ## GitHub
 
@@ -52,13 +61,12 @@ Also open a PR to `cortensor/community-projects` linking the public repo, the vi
 
 ## Submitter checklist (Yusuf)
 
-1. Review the private repository, this draft, and the two notes in `docs/`.
-2. For the required model-backed demo, either install free local Ollama (`ollama pull llama3.1`, then `./scripts/setup-ollama.sh`) or, if you have Portal access, put `CORTENSOR_API_KEY` in the gitignored `.env` and run `./scripts/setup-portal.sh`. Do not spend money on a paid API if a free path works. Do not commit the key.
-3. Run `python -m dossier inspect --agent fixtures/samples/payroll_lure.eml` and record a 1–5 minute video (inspect a lure, show evidence, optionally file a case after approval, show the benign control).
-4. If a reproducible OpenMinion bug appears, file it with the team (privately if security-sensitive) and only attempt a fix PR after they acknowledge it.
-5. Register on DoraHacks for Cortensor Hackathon #5 if you have not already.
-6. Star / follow the official OpenMinion and Cortensor GitHub (and X, if you want to follow the written participate steps). This was not done during the private build.
-7. Make `onepolymath/dossier` public.
-8. Create the DoraHacks BUIDL with the text above, the public repo, and the video. Open the `cortensor/community-projects` PR with the same links.
-9. Submit before **19 December 2026, 07:59 UTC** (07:59 Europe/London, 08:59 Africa/Lagos).
-10. Do not use paid APIs, do not deploy anything that costs money, and do not spend on boosts.
+1. Review the private repository, this draft, the two notes in `docs/`, and the recorded outputs in `demo/output/`.
+2. The free local Ollama run is already done (`llama3.2:3b`, CPU). You can re-run it, or optionally add a Portal run if you have a `CORTENSOR_API_KEY` (gitignored `.env`, `./scripts/setup-portal.sh`). Do not spend money on a paid API. Do not commit a key. If you record a longer 1–5 minute screen-capture, show the payroll lure, the evidence, the honest `agent-validation-fallback` line, and the benign control — not an echo run.
+3. Consider filing the freshness-classifier and forced-tool default notes in `docs/WHAT_WE_LEARNED.md` with the OpenMinion team as product feedback (not a security report). Only attempt a fix PR after they acknowledge it.
+4. Register on DoraHacks for Cortensor Hackathon #5 if you have not already.
+5. Star / follow the official OpenMinion and Cortensor GitHub (and X, if you want to follow the written participate steps). This was not done during the private build.
+6. Make `onepolymath/dossier` public.
+7. Create the DoraHacks BUIDL with the text above, the public repo, and the video. Open the `cortensor/community-projects` PR with the same links.
+8. Submit before **19 December 2026, 07:59 UTC** (07:59 Europe/London, 08:59 Africa/Lagos).
+9. Do not use paid APIs, do not deploy anything that costs money, and do not spend on boosts.

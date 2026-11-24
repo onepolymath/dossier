@@ -1,0 +1,36 @@
+{
+  "provider": "ollama",
+  "model": "llama3.2:3b",
+  "model_quant": "Q4_K_M",
+  "ollama_version": "0.40.18",
+  "openminion": "0.1.22",
+  "agent_id": "dossier",
+  "host": "127.0.0.1:11434",
+  "hardware": "8-core CPU, no GPU, project-local OLLAMA_MODELS",
+  "fixture": "fixtures/samples/benign_meeting.txt",
+  "command": "dossier inspect --agent --session dossier-ollama-benign-2 --format json --timeout 600 fixtures/samples/benign_meeting.txt",
+  "elapsed_seconds": 244,
+  "finished_at_wat": "2026-11-24 20:11 WAT (Africa/Lagos)",
+  "report_mode": "agent-validation-fallback",
+  "severity": "info",
+  "session_id": "dossier-ollama-benign-2",
+  "run_id": "8ea17ad9d7e24567b193e657605f8fac",
+  "signal_count": 0,
+  "tools_called": [
+    "compile_dossier",
+    "extract_artifacts",
+    "inspect_headers",
+    "inspect_text"
+  ],
+  "freshness_classifier": {
+    "answer_mode": "local_only",
+    "classifier_mode": "llm",
+    "classifier_model": "llama3.2:3b",
+    "domain": "finance",
+    "needs_exact_date": false,
+    "needs_live_data": false,
+    "needs_sources": false,
+    "time_sensitive": false
+  },
+  "assistant_text": "No strong lure signals were found. This is not a clean bill of health."
+}

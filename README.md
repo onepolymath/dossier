@@ -42,7 +42,7 @@ flowchart TD
   agent --> diag["APIRuntime diagnostics"]
 ```
 
-The deterministic path is always available and is what CI runs. `--agent` wraps the same tools in the released OpenMinion `0.1.22` SDK: `Agent`, `@tool`, `forced_tools`, `output_type=DossierReport`, a durable `session_id`, a bounded `subagent`, a peer `Handoff`, `approval_callback` for `file_case`, `MemoryBundle`, and `APIRuntime` diagnostics. Provider failures, turn timeouts, and schema validation errors fall back to the deterministic brief instead of inventing a result.
+The deterministic path is always available and is what CI runs. `--agent` wraps the same tools in the released OpenMinion `0.1.22` SDK: `Agent`, `@tool`, `forced_tools`, `output_type=DossierReport`, a durable `session_id`, a bounded `subagent`, a peer `Handoff`, `approval_callback` for `file_case`, `MemoryBundle`, and `APIRuntime` diagnostics. Provider failures, turn timeouts, freshness-gate refusals, runtime session errors, and schema validation errors fall back to the deterministic brief instead of inventing a result.
 
 OpenMinion state is kept under the project-local `.om-home/` directory (`OPENMINION_HOME` / `OPENMINION_DATA_ROOT`). Scripts refuse to use `/home/box/.local/share` or `/home/box/secure`.
 
@@ -64,11 +64,28 @@ A short walkthrough video and still frames are in [`demo/`](demo/).
 
 ## A real model-backed run
 
-The hackathon asks for a short demo of a **real model** using the SDK. Portal access is optional and is not required for the core score.
+The hackathon asks for a short demo of a **real model** using the SDK. That run has been done on this project with free local Ollama `0.40.18` and `llama3.2:3b` (Q4_K_M, CPU). Recorded JSON, pretty text, metadata, and slim logs are under [`demo/output/`](demo/output/). The still frames and `demo/walkthrough.mp4` show that run.
 
-1. **Local and free:** install [Ollama](https://ollama.com/download), pull a tool-capable model (`ollama pull llama3.1`), then run `./scripts/setup-ollama.sh` and `python -m dossier inspect --agent fixtures/samples/payroll_lure.eml`.
-2. **Cortensor Portal (optional):** if you have a `CORTENSOR_API_KEY`, put it in a gitignored `.env` and run `./scripts/setup-portal.sh`. Then `export DOSSIER_AGENT_ID=cortensor-portal`.
-3. **Wiring only:** `./scripts/setup-echo.sh` writes an echo provider config. Echo does not call a model and cannot prove tool use; it is for `dossier doctor` and setup checks.
+Both `--agent` inspects ended in `agent-validation-fallback`: the model ran, tools ran, and the deterministic brief was kept because the final model text was not valid `DossierReport` JSON. That is reported honestly — Dossier does not invent a structured result. The benign control successfully called `compile_dossier`, `extract_artifacts`, `inspect_headers`, and `inspect_text`. The payroll URL specialist called `inspect_url`. See `docs/WHAT_WE_LEARNED.md` for the freshness-classifier and forced-tool findings.
+
+To reproduce:
+
+```bash
+# Install Ollama, start `ollama serve`, pull a small tool-capable model
+ollama pull llama3.2:3b
+./scripts/setup-ollama.sh llama3.2:3b
+export DOSSIER_AGENT_ID=dossier DOSSIER_MODEL=llama3.2:3b
+python -m dossier inspect --agent --session dossier-ollama-payroll \
+  --timeout 600 fixtures/samples/payroll_lure.eml
+python -m dossier inspect --agent --session dossier-ollama-benign \
+  --timeout 600 fixtures/samples/benign_meeting.txt
+```
+
+After switching providers, use a fresh `--session`. Use a new session if you previously ran the echo setup.
+
+**Cortensor Portal (optional):** if you have a `CORTENSOR_API_KEY`, put it in a gitignored `.env` and run `./scripts/setup-portal.sh`. Then `export DOSSIER_AGENT_ID=cortensor-portal`. Portal is not required for the core score.
+
+**Wiring only:** `./scripts/setup-echo.sh` writes an echo provider config. Echo does not call a model and cannot prove tool use; it is for `dossier doctor` and setup checks. Dossier will not treat an echoed prompt as a model answer.
 
 ## Repository layout
 

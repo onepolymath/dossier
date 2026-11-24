@@ -1,0 +1,46 @@
+Dossier  ·  severity high  ·  mode agent-validation-fallback
+10 evidence signal(s), highest severity high: Display name looks official but the mailbox is a consumer address; Reply-To domain does not match the From address; Asks the reader to submit a password, OTP, or login. The model reply failed schema validation (Reply did not validate against DossierReport: 1 validation error for DossierReport
+  Invalid JSON: expected value at line 1 column 1 [type=json_invalid, input_value='dossier: Here is the `Do...xt in which it is used.', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.14/v/json_invalid). Keeping the deterministic brief. The URL specialist subagent completed an inspect_url review of the quoted links.
+
+Recommendation: Do not follow the links, install software, or send funds. Preserve the original message and ask a human reviewer or your usual reporting channel to take a look.
+
+Evidence
+  [high] Display name looks official but the mailbox is a consumer address
+          Acme Payroll <payroll.helpdesk@gmail.com>
+  [high] Reply-To domain does not match the From address
+          From payroll.helpdesk@gmail.com replies to urgent-pay@mail-acme-secure.xyz
+          quote: From: Acme Payroll <payroll.helpdesk@gmail.com>; Reply-To: urgent-pay@mail-acme-secure.xyz
+  [high] Asks the reader to submit a password, OTP, or login
+          verify your account
+          quote: …it will be suspended within 24 hours unless you immediately verify your account and enter your password at:  https://acme-payroll-secure.xy…
+  [high] Asks the reader to keep the request secret
+          do not tell
+          quote: …/steal  Kindly proceed at your earliest convenience. Please do not tell HR about this request until the transfer is complete.  Payr…
+  [medium] Return-Path domain does not match the From address
+          From payroll.helpdesk@gmail.com; Return-Path bounce@mail-acme-secure.xyz
+          quote: bounce@mail-acme-secure.xyz
+  [medium] Urgent or threatening deadline
+          within 24 hours
+          quote: …ion to this matter.  Your payroll deposit will be suspended within 24 hours unless you immediately verify your account and enter your p…
+  [medium] Path or host suggests a login, wallet, or recovery flow
+          /login
+          quote: https://acme-payroll-secure.xyz/login?token=reset&redirect=https://evil.example/steal
+  [medium] Query string asks for a secret or a redirect
+          token, redirect
+          quote: https://acme-payroll-secure.xyz/login?token=reset&redirect=https://evil.example/steal
+  [low] Unusually generic, padded phrasing often seen in generated lures
+          Repeated polite filler with little concrete context
+          quote: I hope this message finds you well. Thank you for your prompt attention to this matter.  Your payroll deposit will be suspended within 24 hours unless you immediately verify your account and enter your password at:  https://acme-payroll-sec…
+  [low] Unusual TLD .xyz on a lure-shaped link
+          acme-payroll-secure.xyz
+          quote: https://acme-payroll-secure.xyz/login?token=reset&redirect=https://evil.example/steal
+
+Artifacts
+  urls: https://acme-payroll-secure.xyz/login?token=reset&redirect=https://evil.example/steal
+  emails: alex@example.com, bounce@mail-acme-secure.xyz, payroll.helpdesk@gmail.com, urgent-pay@mail-acme-secure.xyz
+  domains: acme-payroll-secure.xyz, example.com, gmail.com, mail-acme-secure.xyz
+
+session: dossier-ollama-payroll-3
+
+This is an evidence brief for a human reviewer. It is not a finding of fraud, a legal conclusion, or a substitute for reporting channels your organisation already uses.

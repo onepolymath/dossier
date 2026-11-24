@@ -1,0 +1,24 @@
+{
+  "severity": "info",
+  "summary": "No lure-shaped evidence signals were found in this item. The model reply failed schema validation (Reply did not validate against DossierReport: 1 validation error for DossierReport\n  Invalid JSON: expected value at line 1 column 1 [type=json_invalid, input_value='dossier: No strong lure ...a clean bill of health.', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.14/v/json_invalid). Keeping the deterministic brief.",
+  "recommendation": "No strong lure signals were found. This is not a clean bill of health.",
+  "signals": [],
+  "artifacts": {
+    "urls": [],
+    "emails": [
+      "jordan.lee@example.com",
+      "team@example.com"
+    ],
+    "domains": [
+      "example.com"
+    ],
+    "phones": [],
+    "crypto_addresses": [],
+    "attachments": []
+  },
+  "disclaimer": "This is an evidence brief for a human reviewer. It is not a finding of fraud, a legal conclusion, or a substitute for reporting channels your organisation already uses.",
+  "mode": "agent-validation-fallback",
+  "session_id": "dossier-ollama-benign-2",
+  "run_id": null,
+  "cases_filed": []
+}

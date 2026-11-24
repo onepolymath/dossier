@@ -1,0 +1,112 @@
+{
+  "severity": "high",
+  "summary": "10 evidence signal(s), highest severity high: Display name looks official but the mailbox is a consumer address; Reply-To domain does not match the From address; Asks the reader to submit a password, OTP, or login. The model reply failed schema validation (Reply did not validate against DossierReport: 1 validation error for DossierReport\n  Invalid JSON: expected value at line 1 column 1 [type=json_invalid, input_value='dossier: Here is the `Do...xt in which it is used.', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.14/v/json_invalid). Keeping the deterministic brief. The URL specialist subagent completed an inspect_url review of the quoted links.",
+  "recommendation": "Do not follow the links, install software, or send funds. Preserve the original message and ask a human reviewer or your usual reporting channel to take a look.",
+  "signals": [
+    {
+      "id": "header.display_name_spoof",
+      "title": "Display name looks official but the mailbox is a consumer address",
+      "severity": "high",
+      "detail": "Acme Payroll <payroll.helpdesk@gmail.com>",
+      "evidence": "Acme Payroll <payroll.helpdesk@gmail.com>",
+      "source": "header"
+    },
+    {
+      "id": "header.reply_to_mismatch",
+      "title": "Reply-To domain does not match the From address",
+      "severity": "high",
+      "detail": "From payroll.helpdesk@gmail.com replies to urgent-pay@mail-acme-secure.xyz",
+      "evidence": "From: Acme Payroll <payroll.helpdesk@gmail.com>; Reply-To: urgent-pay@mail-acme-secure.xyz",
+      "source": "header"
+    },
+    {
+      "id": "text.credential_harvest",
+      "title": "Asks the reader to submit a password, OTP, or login",
+      "severity": "high",
+      "detail": "verify your account",
+      "evidence": "…it will be suspended within 24 hours unless you immediately verify your account and enter your password at:  https://acme-payroll-secure.xy…",
+      "source": "text"
+    },
+    {
+      "id": "text.secrecy",
+      "title": "Asks the reader to keep the request secret",
+      "severity": "high",
+      "detail": "do not tell",
+      "evidence": "…/steal  Kindly proceed at your earliest convenience. Please do not tell HR about this request until the transfer is complete.  Payr…",
+      "source": "text"
+    },
+    {
+      "id": "header.return_path_mismatch",
+      "title": "Return-Path domain does not match the From address",
+      "severity": "medium",
+      "detail": "From payroll.helpdesk@gmail.com; Return-Path bounce@mail-acme-secure.xyz",
+      "evidence": "bounce@mail-acme-secure.xyz",
+      "source": "header"
+    },
+    {
+      "id": "text.urgency",
+      "title": "Urgent or threatening deadline",
+      "severity": "medium",
+      "detail": "within 24 hours",
+      "evidence": "…ion to this matter.  Your payroll deposit will be suspended within 24 hours unless you immediately verify your account and enter your p…",
+      "source": "text"
+    },
+    {
+      "id": "url.sensitive_path",
+      "title": "Path or host suggests a login, wallet, or recovery flow",
+      "severity": "medium",
+      "detail": "/login",
+      "evidence": "https://acme-payroll-secure.xyz/login?token=reset&redirect=https://evil.example/steal",
+      "source": "url"
+    },
+    {
+      "id": "url.sensitive_query",
+      "title": "Query string asks for a secret or a redirect",
+      "severity": "medium",
+      "detail": "token, redirect",
+      "evidence": "https://acme-payroll-secure.xyz/login?token=reset&redirect=https://evil.example/steal",
+      "source": "url"
+    },
+    {
+      "id": "text.generic_padding",
+      "title": "Unusually generic, padded phrasing often seen in generated lures",
+      "severity": "low",
+      "detail": "Repeated polite filler with little concrete context",
+      "evidence": "I hope this message finds you well. Thank you for your prompt attention to this matter.  Your payroll deposit will be suspended within 24 hours unless you immediately verify your account and enter your password at:  https://acme-payroll-sec…",
+      "source": "text"
+    },
+    {
+      "id": "url.odd_tld",
+      "title": "Unusual TLD .xyz on a lure-shaped link",
+      "severity": "low",
+      "detail": "acme-payroll-secure.xyz",
+      "evidence": "https://acme-payroll-secure.xyz/login?token=reset&redirect=https://evil.example/steal",
+      "source": "url"
+    }
+  ],
+  "artifacts": {
+    "urls": [
+      "https://acme-payroll-secure.xyz/login?token=reset&redirect=https://evil.example/steal"
+    ],
+    "emails": [
+      "alex@example.com",
+      "bounce@mail-acme-secure.xyz",
+      "payroll.helpdesk@gmail.com",
+      "urgent-pay@mail-acme-secure.xyz"
+    ],
+    "domains": [
+      "acme-payroll-secure.xyz",
+      "example.com",
+      "gmail.com",
+      "mail-acme-secure.xyz"
+    ],
+    "phones": [],
+    "crypto_addresses": [],
+    "attachments": []
+  },
+  "disclaimer": "This is an evidence brief for a human reviewer. It is not a finding of fraud, a legal conclusion, or a substitute for reporting channels your organisation already uses.",
+  "mode": "agent-validation-fallback",
+  "session_id": "dossier-ollama-payroll-3",
+  "run_id": null,
+  "cases_filed": []
+}

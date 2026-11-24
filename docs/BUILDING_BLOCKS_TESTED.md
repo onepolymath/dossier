@@ -13,7 +13,7 @@ What Dossier used from OpenMinion `0.1.22`, what worked, and what did not.
 | Delegation | `subagent(...)` for URL review, plus `Handoff(target=specialist)` | Implemented against the public API. Requires a real tool-capable model to show the model choosing the transfer tool. |
 | Memory | Local case notes exported as `MemoryBundle` | Worked in tests: `to_json` / `from_json` round-trip. |
 | Diagnostics | `dossier doctor` calls `runtime_posture`, `capability_report`, `tool_inventory_report`, `scheduler_readiness` | Available once a local config exists. Echo config is enough to exercise the surfaces; it is not a model-backed run. |
-| Models / Portal | Ollama (free, local) and optional Cortensor Portal | Portal was not called here: it needs a `CORTENSOR_API_KEY` and coordinated access. Ollama was not installed on the build machine; the setup script is ready. Participants without Portal access are not penalized. |
+| Models / Portal | Ollama (free, local) and optional Cortensor Portal | Ollama `0.40.18` was installed on the build machine; `llama3.2:3b` ran `--agent` inspects of `payroll_lure.eml` and `benign_meeting.txt` (see `demo/output/`). Portal was not called: it needs a `CORTENSOR_API_KEY`. Participants without Portal access are not penalized. |
 | Skills, tasks, scheduling | Not used | Left out on purpose. The workflow is one useful inspection, not a feature tour. |
 
 See also [What We Learned](WHAT_WE_LEARNED.md).
