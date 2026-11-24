@@ -1,0 +1,15 @@
+From: "Acme Payroll" <payroll.helpdesk@gmail.com>
+To: alex@example.com
+Reply-To: urgent-pay@mail-acme-secure.xyz
+Return-Path: bounce@mail-acme-secure.xyz
+Subject: Immediate action required: update your payroll details
+
+I hope this message finds you well. Thank you for your prompt attention to this matter.
+
+Your payroll deposit will be suspended within 24 hours unless you immediately verify your account and enter your password at:
+
+https://acme-payroll-secure.xyz/login?token=reset&redirect=https://evil.example/steal
+
+Kindly proceed at your earliest convenience. Please do not tell HR about this request until the transfer is complete.
+
+Payroll Support

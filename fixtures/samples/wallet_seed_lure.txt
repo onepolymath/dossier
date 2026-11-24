@@ -1,0 +1,8 @@
+From: MetaMask Security <security@metamask-support.top>
+Subject: Wallet locked — connect to claim your refund
+
+Your wallet was flagged. Connect your wallet and enter your 12-word seed phrase at
+https://metamask-secure.top/wallet?seed=confirm
+or send 0.05 BTC to bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh so we can process the gas fee.
+
+This is a recording of your account manager. An AI-cloned voice message confirming this is attached. Scan the QR code if the link fails.
